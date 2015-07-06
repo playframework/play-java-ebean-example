@@ -68,7 +68,7 @@ public class Application extends Controller {
         if(computerForm.hasErrors()) {
             return badRequest(editForm.render(id, computerForm));
         }
-        computerForm.get().update(id);
+        computerForm.get().update();
         flash("success", "Computer " + computerForm.get().name + " has been updated");
         return GO_HOME;
     }

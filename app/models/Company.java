@@ -3,7 +3,7 @@ package models;
 import java.util.*;
 import javax.persistence.*;
 
-import play.db.ebean.*;
+import com.avaje.ebean.Model;
 import play.data.validation.*;
 
 
@@ -25,7 +25,7 @@ public class Company extends Model {
     /**
      * Generic query helper for entity Company with id Long
      */
-    public static Model.Finder<Long,Company> find = new Model.Finder<Long,Company>(Long.class, Company.class);
+    public static Finder<Long,Company> find = new Finder<>(Company.class);
 
     public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
