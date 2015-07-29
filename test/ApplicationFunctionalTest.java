@@ -1,47 +1,48 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.*;
 
-import java.util.*;
-
 import play.mvc.*;
-
+import play.test.*;
+import play.data.DynamicForm;
+import play.data.validation.ValidationError;
+import play.data.validation.Constraints.RequiredValidator;
+import play.i18n.Lang;
+import play.libs.F;
+import play.libs.F.*;
+import play.twirl.api.Content;
+import static play.mvc.Http.Status.BAD_REQUEST;
+import static play.mvc.Http.Status.OK;
+import static play.mvc.Http.Status.SEE_OTHER;
 import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
+import static org.junit.Assert.*;
+import controllers.Application;
 
-public class FunctionalTest {
+public class ApplicationFunctionalTest {
 
-    @Test
-    public void redirectHomePage() {
-        running(fakeApplication(), new Runnable() {
-           public void run() {
-               Result result = callAction(controllers.routes.ref.Application.index());
-
-               assertThat(status(result)).isEqualTo(SEE_OTHER);
-               assertThat(redirectLocation(result)).isEqualTo("/computers");
-           }
-        });
-    }
-    
     @Test
     public void listComputersOnTheFirstPage() {
-        running(fakeApplication(), new Runnable() {
-           public void run() {
-               Result result = callAction(controllers.routes.ref.Application.list(0, "name", "asc", ""));
-
-               assertThat(status(result)).isEqualTo(OK);
-               assertThat(contentAsString(result)).contains("574 computers found");
-           }
+        running(fakeApplication(inMemoryDatabase("test")), () -> {
+        	Result result = callAction(controllers.routes.ref.Application.list(0, "name", "asc", ""));
+            assertEquals(OK, result.status());
+            assertTrue(contentAsString(result).contains("574 computers found"));
         });
     }
     
     @Test
     public void filterComputerByName() {
-        running(fakeApplication(), new Runnable() {
-           public void run() {
-               Result result = callAction(controllers.routes.ref.Application.list(0, "name", "asc", "Apple"));
+    	running(fakeApplication(inMemoryDatabase("test")), () -> {
+           
+           Result result = callAction(controllers.routes.ref.Application.list(0, "name", "asc", "Apple"));
 
-               assertThat(status(result)).isEqualTo(OK);
-               assertThat(contentAsString(result)).contains("13 computers found");
-           }
+           assertThat(status(result)).isEqualTo(OK);
+           assertThat(contentAsString(result)).contains("13 computers found");
+           
         });
     }
     
@@ -86,5 +87,5 @@ public class FunctionalTest {
             }
         });
     }
-    
+
 }
