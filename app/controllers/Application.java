@@ -16,14 +16,14 @@ public class Application extends Controller {
     /**
      * This result directly redirect to application home.
      */
-    public static Result GO_HOME = redirect(
+    public Result GO_HOME = redirect(
         routes.Application.list(0, "name", "asc", "")
     );
     
     /**
      * Handle default path requests, redirect to computers list
      */
-    public static Result index() {
+    public Result index() {
         return GO_HOME;
     }
 
@@ -35,7 +35,7 @@ public class Application extends Controller {
      * @param order Sort order (either asc or desc)
      * @param filter Filter applied on computer names
      */
-    public static Result list(int page, String sortBy, String order, String filter) {
+    public Result list(int page, String sortBy, String order, String filter) {
         return ok(
             list.render(
                 Computer.page(page, 10, sortBy, order, filter),
@@ -49,7 +49,7 @@ public class Application extends Controller {
      *
      * @param id Id of the computer to edit
      */
-    public static Result edit(Long id) {
+    public Result edit(Long id) {
         Form<Computer> computerForm = form(Computer.class).fill(
             Computer.find.byId(id)
         );
@@ -63,7 +63,7 @@ public class Application extends Controller {
      *
      * @param id Id of the computer to edit
      */
-    public static Result update(Long id) {
+    public Result update(Long id) {
         Form<Computer> computerForm = form(Computer.class).bindFromRequest();
         if(computerForm.hasErrors()) {
             return badRequest(editForm.render(id, computerForm));
@@ -76,7 +76,7 @@ public class Application extends Controller {
     /**
      * Display the 'new computer form'.
      */
-    public static Result create() {
+    public Result create() {
         Form<Computer> computerForm = form(Computer.class);
         return ok(
             createForm.render(computerForm)
@@ -86,7 +86,7 @@ public class Application extends Controller {
     /**
      * Handle the 'new computer form' submission 
      */
-    public static Result save() {
+    public Result save() {
         Form<Computer> computerForm = form(Computer.class).bindFromRequest();
         if(computerForm.hasErrors()) {
             return badRequest(createForm.render(computerForm));
@@ -99,7 +99,7 @@ public class Application extends Controller {
     /**
      * Handle computer deletion
      */
-    public static Result delete(Long id) {
+    public Result delete(Long id) {
         Computer.find.ref(id).delete();
         flash("success", "Computer has been deleted");
         return GO_HOME;
