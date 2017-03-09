@@ -1,4 +1,6 @@
-# play-ebean-example
+[<img src="https://img.shields.io/travis/playframework/play-java-ebean-example.svg"/>](https://travis-ci.org/playframework/play-java-ebean-example)
+
+# play-java-ebean-example
 
 This is an example Play application that uses Java, and communicates with an in memory database using EBean.
 
