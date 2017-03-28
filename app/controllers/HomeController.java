@@ -1,7 +1,7 @@
 package controllers;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Transaction;
+import io.ebean.Ebean;
+import io.ebean.Transaction;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
@@ -61,7 +61,7 @@ public class HomeController  extends Controller {
      */
     public Result edit(Long id) {
         Form<Computer> computerForm = formFactory.form(Computer.class).fill(
-            Computer.find.byId(id)
+            Ebean.find(Computer.class).setId(id).findUnique()
         );
         return ok(
             views.html.editForm.render(id, computerForm)
@@ -81,7 +81,7 @@ public class HomeController  extends Controller {
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            Computer savedComputer = Computer.find.byId(id);
+            Computer savedComputer = Ebean.find(Computer.class).setId(id).findUnique();
             if (savedComputer != null) {
                 Computer newComputerData = computerForm.get();
                 savedComputer.company = newComputerData.company;
@@ -127,7 +127,7 @@ public class HomeController  extends Controller {
      * Handle computer deletion
      */
     public Result delete(Long id) {
-        Computer.find.ref(id).delete();
+        Ebean.find(Computer.class).setId(id).findUnique().delete();
         flash("success", "Computer has been deleted");
         return GO_HOME;
     }

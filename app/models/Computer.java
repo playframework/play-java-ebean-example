@@ -3,11 +3,11 @@ package models;
 import java.util.*;
 import javax.persistence.*;
 
-import com.avaje.ebean.Model;
+import io.ebean.Model;
 import play.data.format.*;
 import play.data.validation.*;
 
-import com.avaje.ebean.*;
+import io.ebean.*;
 
 /**
  * Computer entity managed by Ebean
@@ -31,12 +31,7 @@ public class Computer extends Model {
     
     @ManyToOne
     public Company company;
-    
-    /**
-     * Generic query helper for entity Computer with id Long
-     */
-    public static Find<Long,Computer> find = new Find<Long,Computer>(){};
-    
+
     /**
      * Return a paged list of computer
      *
@@ -48,7 +43,7 @@ public class Computer extends Model {
      */
     public static PagedList<Computer> page(int page, int pageSize, String sortBy, String order, String filter) {
         return
-            find.where()
+            Ebean.find(Computer.class).where()
                 .ilike("name", "%" + filter + "%")
                 .orderBy(sortBy + " " + order)
                 .fetch("company")
