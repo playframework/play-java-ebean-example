@@ -1,4 +1,4 @@
-@(id: Long, computerForm: Form[Computer])
+@(id: Long, computerForm: Form[Computer], companies: Map[String, String])
 
 @import helper._
 
@@ -16,7 +16,7 @@
             
             @select(
                 computerForm("company.id"), 
-                options(Company.options), 
+                options(companies),
                 '_label -> "Company", '_default -> "-- Choose a company --",
                 '_showConstraints -> false
             )
