@@ -13,13 +13,10 @@ import io.ebean.*;
  * Computer entity managed by Ebean
  */
 @Entity 
-public class Computer extends Model {
+public class Computer extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-	@Id
-    public Long id;
-    
     @Constraints.Required
     public String name;
     

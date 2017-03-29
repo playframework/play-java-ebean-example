@@ -8,7 +8,7 @@ import static play.test.Helpers.*;
 
 import models.*;
 
-import com.avaje.ebean.*;
+import io.ebean.*;
 
 public class ModelTest {
     
@@ -20,7 +20,7 @@ public class ModelTest {
     public void findById() {
         running(fakeApplication(), new Runnable() {
            public void run() {
-               Computer macintosh = Computer.find.byId(21L);
+               Computer macintosh = Ebean.find(Computer.class).setId(21L).findUnique();
                assertThat(macintosh.name, equalTo("Macintosh"));
                assertThat(formatted(macintosh.introduced), equalTo("1984-01-24"));
            }

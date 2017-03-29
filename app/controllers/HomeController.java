@@ -118,8 +118,10 @@ public class HomeController  extends Controller {
         if(computerForm.hasErrors()) {
             return badRequest(views.html.createForm.render(computerForm));
         }
-        computerForm.get().save();
-        flash("success", "Computer " + computerForm.get().name + " has been created");
+        Computer computer = computerForm.get();
+        computer.id = System.currentTimeMillis();
+        computer.insert();
+        flash("success", "Computer " + computer.name + " has been created");
         return GO_HOME;
     }
     

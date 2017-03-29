@@ -16,13 +16,10 @@ import java.util.Map;
  * Company entity managed by Ebean
  */
 @Entity 
-public class Company extends Model {
+public class Company extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-	@Id
-    public Long id;
-    
     @Constraints.Required
     public String name;
 

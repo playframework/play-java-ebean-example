@@ -6,10 +6,10 @@ import static play.test.Helpers.*;
 
 import static org.fluentlenium.core.filter.FilterConstructor.*;
 
-public class IntegrationTest {
+public class BrowserTest {
 
     @Test
-    public void testIntegration() {
+    public void testBrowser() {
         running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:3333");
 
