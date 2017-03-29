@@ -31,6 +31,7 @@
     }
     
     @form(routes.HomeController.delete(id), 'class -> "topRight") {
+        @CSRF.formField
         <input type="submit" value="Delete this computer" class="btn danger">
     }
     

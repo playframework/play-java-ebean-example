@@ -7,9 +7,8 @@ import play.test.WithApplication;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static play.api.test.CSRFTokenHelper.addCSRFToken;
 import static play.test.Helpers.*;
 
 // Use FixMethodOrder to run the tests sequentially
@@ -20,31 +19,30 @@ public class FunctionalTest extends WithApplication {
     public void redirectHomePage() {
         Result result = route(app, controllers.routes.HomeController.index());
 
-        assertThat(result.status(), equalTo(SEE_OTHER));
-        assertThat(result.redirectLocation().get(), equalTo("/computers"));
+        assertThat(result.status()).isEqualTo(SEE_OTHER);
+        assertThat(result.redirectLocation().get()).isEqualTo("/computers");
     }
 
     @Test
     public void listComputersOnTheFirstPage() {
         Result result = route(app, controllers.routes.HomeController.list(0, "name", "asc", ""));
 
-        assertThat(result.status(), equalTo(OK));
-        assertThat(contentAsString(result), containsString("574 computers found"));
+        assertThat(result.status()).isEqualTo(OK);
+        assertThat(contentAsString(result)).contains("574 computers found");
     }
 
     @Test
     public void filterComputerByName() {
         Result result = route(app, controllers.routes.HomeController.list(0, "name", "asc", "Apple"));
 
-        assertThat(result.status(), equalTo(OK));
-        assertThat(contentAsString(result), containsString("13 computers found"));
+        assertThat(result.status()).isEqualTo(OK);
+        assertThat(contentAsString(result)).contains("13 computers found");
     }
 
     @Test
     public void createANewComputer() {
-        Result result = route(app, controllers.routes.HomeController.save());
-
-        assertThat(result.status(), equalTo(BAD_REQUEST));
+        Result result = route(app, addCSRFToken(fakeRequest().uri(controllers.routes.HomeController.save().url())));
+        assertThat(result.status()).isEqualTo(OK);
 
         Map<String, String> data = new HashMap<>();
         data.put("name", "FooBar");
@@ -52,29 +50,26 @@ public class FunctionalTest extends WithApplication {
         data.put("company.id", "1");
 
         String saveUrl = controllers.routes.HomeController.save().url();
-        result = route(app, fakeRequest().bodyForm(data).method("POST").uri(saveUrl));
+        result = route(app, addCSRFToken(fakeRequest().bodyForm(data).method("POST").uri(saveUrl)));
 
-        assertThat(result.status(), equalTo(BAD_REQUEST));
-        assertThat(contentAsString(result), containsString("<option value=\"1\" selected=\"selected\">Apple Inc.</option>"));
+        assertThat(result.status()).isEqualTo(BAD_REQUEST);
+        assertThat(contentAsString(result)).contains("<option value=\"1\" selected=\"selected\">Apple Inc.</option>");
         //  <input type="text" id="introduced" name="introduced" value="badbadbad" aria-describedby="introduced_info_0 introduced_error_0" aria-invalid="true" class="form-control">
-        assertThat(contentAsString(result), containsString("<input type=\"text\" id=\"introduced\" name=\"introduced\" value=\"badbadbad\" "));
+        assertThat(contentAsString(result)).contains("<input type=\"text\" id=\"introduced\" name=\"introduced\" value=\"badbadbad\" ");
         // <input type="text" id="name" name="name" value="FooBar" aria-describedby="name_info_0" required="true" class="form-control">
-        assertThat(contentAsString(result), containsString("<input type=\"text\" id=\"name\" name=\"name\" value=\"FooBar\" "));
+        assertThat(contentAsString(result)).contains("<input type=\"text\" id=\"name\" name=\"name\" value=\"FooBar\" ");
 
         data.put("introduced", "2011-12-24");
 
-        result = route(
-                app,
-                fakeRequest().bodyForm(data).method("POST").uri(saveUrl)
-        );
+        result = route(app, fakeRequest().bodyForm(data).method("POST").uri(saveUrl));
 
-        assertThat(result.status(), equalTo(SEE_OTHER));
-        assertThat(result.redirectLocation().get(), equalTo("/computers"));
-        assertThat(result.flash().get("success"), equalTo("Computer FooBar has been created"));
+        assertThat(result.status()).isEqualTo(SEE_OTHER);
+        assertThat(result.redirectLocation().get()).isEqualTo("/computers");
+        assertThat(result.flash().get("success")).isEqualTo("Computer FooBar has been created");
 
         result = route(app, controllers.routes.HomeController.list(0, "name", "asc", "FooBar"));
-        assertThat(result.status(), equalTo(OK));
-        assertThat(contentAsString(result), containsString("One computer found"));
+        assertThat(result.status()).isEqualTo(OK);
+        assertThat(contentAsString(result)).contains("One computer found");
     }
 
 }
