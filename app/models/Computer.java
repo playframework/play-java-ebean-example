@@ -47,12 +47,25 @@ public class Computer extends Model {
      * @param filter Filter applied on the name column
      */
     public static PagedList<Computer> page(int page, int pageSize, String sortBy, String order, String filter) {
-        return
-            find.where()
-                .ilike("name", "%" + filter + "%")
-                .orderBy(sortBy + " " + order)
-                .fetch("company")
-                .findPagedList(page, pageSize);
+
+        com.avaje.ebean.Query<Computer> q = find.query();
+
+        q.fetch("company")
+            .where().ilike("name", "%" + filter + "%");
+
+        if (beanPropertyExists(Computer.class, sortBy) && order.matches("(asc|desc)")) {
+            q.orderBy(sortBy + " " + order);
+        }
+
+        return q.findPagedList(page, pageSize);
+    }
+
+    private static boolean beanPropertyExists(Class<?> beanType, String property) {
+        return Ebean
+            .getDefaultServer()
+            .getPluginApi()
+            .getBeanType(beanType)
+            .isValidExpression(property);
     }
     
 }
