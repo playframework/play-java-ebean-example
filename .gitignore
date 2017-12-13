@@ -5,6 +5,7 @@ target
 tmp
 .history
 dist
+build
 /.idea
 /*.iml
 /out
@@ -15,6 +16,7 @@ dist
 .settings
 .target
 .cache
+.gradle
 bin
 .DS_Store
 activator-sbt-*-shim.sbt
