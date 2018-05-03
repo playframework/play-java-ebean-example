@@ -27,6 +27,9 @@ and the documentation can be found here:
 ## Mysql configuration
 
 db.default.driver=com.mysql.jdbc.Driver
+
 db.default.url="jdbc:mysql://localhost/ebean?useSSL=false"
+
 db.default.username=root
+
 db.default.password="whatever"
