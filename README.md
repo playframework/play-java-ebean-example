@@ -24,7 +24,7 @@ and the documentation can be found here:
 
 [https://ebean-orm.github.io/](https://ebean-orm.github.io/)
 
-## mysql configuration
+## Mysql configuration
 
 db.default.driver=com.mysql.jdbc.Driver
 db.default.url="jdbc:mysql://localhost/ebean?useSSL=false"
