@@ -23,3 +23,13 @@ EBean is a Java ORM library that uses SQL:
 and the documentation can be found here:
 
 [https://ebean-orm.github.io/](https://ebean-orm.github.io/)
+
+## Mysql configuration
+
+db.default.driver=com.mysql.jdbc.Driver
+
+db.default.url="jdbc:mysql://localhost/ebean?useSSL=false"
+
+db.default.username=root
+
+db.default.password="whatever"
