@@ -1,5 +1,5 @@
-@import play.api.mvc.RequestHeader
-@(currentPage: io.ebean.PagedList[Computer], currentSortBy: String, currentOrder: String, currentFilter: String)(request:RequestHeader)
+@import play.mvc.Http.Request
+@(currentPage: io.ebean.PagedList[Computer], currentSortBy: String, currentOrder: String, currentFilter: String)(implicit request: Request, messages: play.i18n.Messages))
 
 @****************************************
 * Helper generating navigation links    *

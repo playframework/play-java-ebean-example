@@ -3,6 +3,7 @@ package controllers;
 import models.Computer;
 import play.data.Form;
 import play.data.FormFactory;
+import play.i18n.MessagesApi;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -25,16 +26,19 @@ public class HomeController extends Controller {
     private final CompanyRepository companyRepository;
     private final FormFactory formFactory;
     private final HttpExecutionContext httpExecutionContext;
+    private MessagesApi messagesApi;
 
     @Inject
     public HomeController(FormFactory formFactory,
                           ComputerRepository computerRepository,
                           CompanyRepository companyRepository,
-                          HttpExecutionContext httpExecutionContext) {
+                          HttpExecutionContext httpExecutionContext,
+                          MessagesApi messagesApi) {
         this.computerRepository = computerRepository;
         this.formFactory = formFactory;
         this.companyRepository = companyRepository;
         this.httpExecutionContext = httpExecutionContext;
+        this.messagesApi = messagesApi;
     }
 
     /**
@@ -63,7 +67,7 @@ public class HomeController extends Controller {
         // Run a db operation in another thread (using DatabaseExecutionContext)
         return computerRepository.page(page, 10, sortBy, order, filter).thenApplyAsync(list -> {
             // This is the HTTP rendering thread context
-            return ok(views.html.list.render(list, sortBy, order, filter, request.asScala()));
+            return ok(views.html.list.render(list, sortBy, order, filter, request, messagesApi.preferred(request)));
         }, httpExecutionContext.current());
     }
 
@@ -91,8 +95,8 @@ public class HomeController extends Controller {
      *
      * @param id Id of the computer to edit
      */
-    public CompletionStage<Result> update(Long id) throws PersistenceException {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
+    public CompletionStage<Result> update(Http.Request request, Long id) throws PersistenceException {
+        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest(request);
         if (computerForm.hasErrors()) {
             // Run companies db operation and then render the failure case
             return companyRepository.options().thenApplyAsync(companies -> {
@@ -113,25 +117,25 @@ public class HomeController extends Controller {
     /**
      * Display the 'new computer form'.
      */
-    public CompletionStage<Result> create() {
+    public CompletionStage<Result> create(Http.Request request) {
         Form<Computer> computerForm = formFactory.form(Computer.class);
         // Run companies db operation and then render the form
         return companyRepository.options().thenApplyAsync((Map<String, String> companies) -> {
             // This is the HTTP rendering thread context
-            return ok(views.html.createForm.render(computerForm, companies));
+            return ok(views.html.createForm.render(computerForm, companies, request, messagesApi.preferred(request)));
         }, httpExecutionContext.current());
     }
 
     /**
      * Handle the 'new computer form' submission
      */
-    public CompletionStage<Result> save() {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
+    public CompletionStage<Result> save(Http.Request request) {
+        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest(request);
         if (computerForm.hasErrors()) {
             // Run companies db operation and then render the form
             return companyRepository.options().thenApplyAsync(companies -> {
                 // This is the HTTP rendering thread context
-                return badRequest(views.html.createForm.render(computerForm, companies));
+                return badRequest(views.html.createForm.render(computerForm, companies, request, messagesApi.preferred(request)));
             }, httpExecutionContext.current());
         }
 
