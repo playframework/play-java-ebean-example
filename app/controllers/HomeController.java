@@ -5,6 +5,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import repository.CompanyRepository;
@@ -58,11 +59,11 @@ public class HomeController extends Controller {
      * @param order  Sort order (either asc or desc)
      * @param filter Filter applied on computer names
      */
-    public CompletionStage<Result> list(int page, String sortBy, String order, String filter) {
+    public CompletionStage<Result> list(Http.Request request, int page, String sortBy, String order, String filter) {
         // Run a db operation in another thread (using DatabaseExecutionContext)
         return computerRepository.page(page, 10, sortBy, order, filter).thenApplyAsync(list -> {
             // This is the HTTP rendering thread context
-            return ok(views.html.list.render(list, sortBy, order, filter));
+            return ok(views.html.list.render(list, sortBy, order, filter, request.asScala()));
         }, httpExecutionContext.current());
     }
 

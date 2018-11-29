@@ -1,4 +1,5 @@
-@(currentPage: io.ebean.PagedList[Computer], currentSortBy: String, currentOrder: String, currentFilter: String)
+@import play.api.mvc.RequestHeader
+@(currentPage: io.ebean.PagedList[Computer], currentSortBy: String, currentOrder: String, currentFilter: String)(request:RequestHeader)
 
 @****************************************
 * Helper generating navigation links    *
@@ -39,9 +40,9 @@
 
     <h1 id="homeTitle">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
 
-    @if(flash.containsKey("success")) {
+    @request.flash.get("success").map { successFlashValue =>
         <div class="alert-message warning">
-            <strong>Done!</strong> @flash.get("success")
+            <strong>Done!</strong> @successFlashValue
         </div>
     }
 

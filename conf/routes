@@ -6,7 +6,7 @@
 GET     /                           controllers.HomeController.index()
 
 # Computers list (look at the default values for pagination parameters)
-GET     /computers                  controllers.HomeController.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
+GET     /computers                  controllers.HomeController.list(request: Request, p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 
 # Add computer
 GET     /computers/new              controllers.HomeController.create()
