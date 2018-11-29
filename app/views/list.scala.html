@@ -1,5 +1,10 @@
 @import play.mvc.Http.Request
-@(currentPage: io.ebean.PagedList[Computer], currentSortBy: String, currentOrder: String, currentFilter: String)(implicit request: Request, messages: play.i18n.Messages))
+@(currentPage: io.ebean.PagedList[Computer],
+        currentSortBy: String,
+        currentOrder: String,
+        currentFilter: String)(
+        implicit request: Request,
+        messages: play.i18n.Messages)
 
 @****************************************
 * Helper generating navigation links    *
@@ -40,7 +45,7 @@
 
     <h1 id="homeTitle">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
 
-    @request.flash.get("success").map { successFlashValue =>
+    @request.flash.asScala().get("success").map { successFlashValue =>
         <div class="alert-message warning">
             <strong>Done!</strong> @successFlashValue
         </div>

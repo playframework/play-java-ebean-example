@@ -13,7 +13,7 @@ GET     /computers/new              controllers.HomeController.create(request: R
 POST    /computers                  controllers.HomeController.save(request: Request)
 
 # Edit existing computer
-GET     /computers/:id              controllers.HomeController.edit(id:Long)
+GET     /computers/:id              controllers.HomeController.edit(request: Request, id:Long)
 POST    /computers/:id              controllers.HomeController.update(request: Request, id:Long)
 
 # Delete a computer

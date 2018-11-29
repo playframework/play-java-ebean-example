@@ -45,7 +45,7 @@ public class HomeController extends Controller {
      * This result directly redirect to application home.
      */
     private Result GO_HOME = Results.redirect(
-            routes.HomeController.list(0, "name", "asc", "")
+        routes.HomeController.list(0, "name", "asc", "")
     );
 
     /**
@@ -76,7 +76,7 @@ public class HomeController extends Controller {
      *
      * @param id Id of the computer to edit
      */
-    public CompletionStage<Result> edit(Long id) {
+    public CompletionStage<Result> edit(Http.Request request,Long id) {
 
         // Run a db operation in another thread (using DatabaseExecutionContext)
         CompletionStage<Map<String, String>> companiesFuture = companyRepository.options();
@@ -86,7 +86,7 @@ public class HomeController extends Controller {
             // This is the HTTP rendering thread context
             Computer c = computerOptional.get();
             Form<Computer> computerForm = formFactory.form(Computer.class).fill(c);
-            return ok(views.html.editForm.render(id, computerForm, companies));
+            return ok(views.html.editForm.render(id, computerForm, companies, request, messagesApi.preferred(request)));
         }, httpExecutionContext.current());
     }
 
@@ -101,15 +101,15 @@ public class HomeController extends Controller {
             // Run companies db operation and then render the failure case
             return companyRepository.options().thenApplyAsync(companies -> {
                 // This is the HTTP rendering thread context
-                return badRequest(views.html.editForm.render(id, computerForm, companies));
+                return badRequest(views.html.editForm.render(id, computerForm, companies, request, messagesApi.preferred(request)));
             }, httpExecutionContext.current());
         } else {
             Computer newComputerData = computerForm.get();
             // Run update operation and then flash and then redirect
             return computerRepository.update(id, newComputerData).thenApplyAsync(data -> {
                 // This is the HTTP rendering thread context
-                flash("success", "Computer " + newComputerData.name + " has been updated");
-                return GO_HOME;
+                return GO_HOME
+                    .flash("success", "Computer " + newComputerData.name + " has been updated");
             }, httpExecutionContext.current());
         }
     }
@@ -143,8 +143,8 @@ public class HomeController extends Controller {
         // Run insert db operation, then redirect
         return computerRepository.insert(computer).thenApplyAsync(data -> {
             // This is the HTTP rendering thread context
-            flash("success", "Computer " + computer.name + " has been created");
-            return GO_HOME;
+            return GO_HOME
+                .flash("success", "Computer " + computer.name + " has been created");
         }, httpExecutionContext.current());
     }
 
@@ -155,8 +155,8 @@ public class HomeController extends Controller {
         // Run delete db operation, then redirect
         return computerRepository.delete(id).thenApplyAsync(v -> {
             // This is the HTTP rendering thread context
-            flash("success", "Computer has been deleted");
-            return GO_HOME;
+            return GO_HOME
+                .flash("success", "Computer has been deleted");
         }, httpExecutionContext.current());
     }
 
