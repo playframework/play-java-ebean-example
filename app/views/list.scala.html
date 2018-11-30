@@ -1,9 +1,8 @@
-@import play.mvc.Http.Request
 @(currentPage: io.ebean.PagedList[Computer],
         currentSortBy: String,
         currentOrder: String,
         currentFilter: String)(
-        implicit request: Request,
+        implicit request: Http.Request,
         messages: play.i18n.Messages)
 
 @****************************************
