@@ -26,7 +26,7 @@ public class HomeController extends Controller {
     private final CompanyRepository companyRepository;
     private final FormFactory formFactory;
     private final HttpExecutionContext httpExecutionContext;
-    private MessagesApi messagesApi;
+    private final MessagesApi messagesApi;
 
     @Inject
     public HomeController(FormFactory formFactory,
