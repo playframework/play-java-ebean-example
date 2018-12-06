@@ -7,7 +7,6 @@ jdk:
 env:
   matrix:
     - SCRIPT=scripts/test-sbt
-#   - SCRIPT=scripts/test-gradle
 script:
   - $SCRIPT
 cache:
@@ -24,10 +23,6 @@ before_cache:
 matrix:
   fast_finish: true
   allow_failures:
-    # Current release of Gradle still does not supports Play 2.7.x releases
-    # As soon as there is a release of Gradle that fixes that, we can then
-    # remove this allowed failure.
-    - env: SCRIPT=scripts/test-gradle
     # Java 11 is still not fully supported. It is good that we are already
     # testing our sample applications to better discover possible problems
     # but we can allow failures here too.
