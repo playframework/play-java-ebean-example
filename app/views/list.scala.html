@@ -44,7 +44,7 @@
 
     <h1 id="homeTitle">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
 
-    @flash("success").map { successFlashValue =>
+    @request.flash("success").map { successFlashValue =>
         <div class="alert-message warning">
             <strong>Done!</strong> @successFlashValue
         </div>
