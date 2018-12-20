@@ -44,7 +44,7 @@
 
     <h1 id="homeTitle">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
 
-    @request.flash.apply("success").map { successFlashValue =>
+    @request.flash.asScala().get("success").map { successFlashValue =>
         <div class="alert-message warning">
             <strong>Done!</strong> @successFlashValue
         </div>
