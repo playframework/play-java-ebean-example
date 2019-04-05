@@ -52,7 +52,7 @@
 
 @main {
 
-  <h1 class="my-3">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
+  <h1 class="my-3" id="page-title">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
 
   @request.flash.asScala().get("success").map { successFlashValue =>
     <div class="alert alert-warning" role="alert">
@@ -127,11 +127,11 @@
     <nav aria-label="...">
       <ul class="pagination float-right">
         @if(currentPage.hasPrev) {
-          <li class="page-item">
+          <li class="page-item previous">
             <a class="page-link" href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
           </li>
         } else {
-          <li class="page-item disabled">
+          <li class="page-item previous disabled">
             <a class="page-link">&larr; Previous</a>
           </li>
         }
@@ -139,11 +139,11 @@
           <a class="page-link" href="#">Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
         </li>
         @if(currentPage.hasNext) {
-          <li class="page-item">
+          <li class="page-item next">
             <a class="page-link" href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
           </li>
         } else {
-          <li class="page-item disabled">
+          <li class="page-item next disabled">
             <a class="page-link" >Next &rarr;</a>
           </li>
         }

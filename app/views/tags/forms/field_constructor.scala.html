@@ -11,7 +11,7 @@
 }
 
 <label for="@elements.id">@elements.label</label>
-<div class="input">
+<div id="input-for-@elements.id" class="input">
   @Html(input)
   <span class="invalid-feedback">@elements.errors.mkString(", ")</span>
   <small class="form-text text-muted">@elements.infos.mkString(", ")</small>
